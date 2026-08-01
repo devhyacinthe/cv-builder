@@ -1,0 +1,9 @@
+CLAUDE.md
+
+node_modules
+.nuxt
+.output
+dist
+.env
+*.log
+.DS_Store
