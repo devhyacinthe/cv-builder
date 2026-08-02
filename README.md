@@ -46,10 +46,12 @@ de génération.
 
 ## Déploiement
 
-`.github/workflows/deploy.yml` publie automatiquement sur GitHub Pages à chaque push sur `main`.
-Activez-le une fois : **Settings → Pages → Source : GitHub Actions**. Le site devient disponible sur
-`https://<compte>.github.io/<dépôt>/` ; le chemin de base est injecté au build via
-`NUXT_APP_BASE_URL`, il n'y a rien à modifier dans le code.
+`.github/workflows/deploy.yml` publie automatiquement sur GitHub Pages à chaque push sur `main`. Le
+workflow active Pages lui-même au premier passage (`enablement: true`) ; si l'organisation l'interdit,
+faites-le une fois à la main : **Settings → Pages → Source : GitHub Actions**.
+
+Le site est servi sur `https://<compte>.github.io/<dépôt>/` ; le chemin de base est injecté au build
+via `NUXT_APP_BASE_URL`, il n'y a rien à modifier dans le code.
 
 ## Pile technique
 
