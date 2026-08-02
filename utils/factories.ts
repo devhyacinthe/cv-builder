@@ -79,6 +79,7 @@ export const createSkill = (patch: Partial<Skill> = {}): Skill => ({
 export const createSkillCategory = (patch: Partial<SkillCategory> = {}): SkillCategory => ({
   id: createId(),
   name: '',
+  kind: 'technical',
   skills: [],
   ...patch,
 })
@@ -115,7 +116,11 @@ export const createCvDocument = (patch: Partial<CvDocument> = {}): CvDocument =>
   name: 'Mon CV',
   templateId: 'ats-classic',
   accent: '#1e3a5f',
+  createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
+  exportedAt: '',
+  hiddenIds: [],
+  hiddenSections: [],
   ...patch,
 })
 
@@ -141,4 +146,5 @@ export const createProfile = (): Profile => ({
   languages: [],
   certifications: [],
   publications: [],
+  interests: [],
 })

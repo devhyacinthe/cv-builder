@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Profile } from '~/schemas/profile'
 import { formatMonth, formatPeriod } from '~/utils/date'
-import { contactLines, fullName, hasContent, socialLines } from '~/utils/cvContent'
+import { contactLines, fullName, hasContent, skillNames, socialLines } from '~/utils/cvContent'
 
 /**
  * Engineer — colonne technique à droite, projets au même rang que les
@@ -123,10 +123,14 @@ const stack = computed(() => {
           <h3>Compétences</h3>
           <div v-for="category in profile.skillCategories" :key="category.id" class="group">
             <p class="group-name">{{ category.name }}</p>
-            <div v-for="skill in category.skills" :key="skill.id" class="skill">
-              <span>{{ skill.name }}</span>
-              <span class="bar"><span class="fill" :style="{ width: `${skill.level * 20}%` }" /></span>
-            </div>
+            <!-- Les compétences transversales ne se mesurent pas : pas de barre. -->
+            <p v-if="category.kind === 'soft'" class="soft">{{ skillNames(category.skills) }}</p>
+            <template v-else>
+              <div v-for="skill in category.skills" :key="skill.id" class="skill">
+                <span>{{ skill.name }}</span>
+                <span class="bar"><span class="fill" :style="{ width: `${skill.level * 20}%` }" /></span>
+              </div>
+            </template>
           </div>
         </section>
 
@@ -157,14 +161,19 @@ const stack = computed(() => {
 .engineer {
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   color: #1f2429;
-  background: linear-gradient(to right, #ffffff 0 138mm, #f2f4f6 138mm);
+  --page-bg: linear-gradient(
+    to right,
+    #ffffff 0 calc(138mm * var(--cv-zoom, 1)),
+    #f2f4f6 calc(138mm * var(--cv-zoom, 1))
+  );
+  background: var(--page-bg);
   print-color-adjust: exact;
 }
 
 .layout {
   display: grid;
   grid-template-columns: 138mm 72mm;
-  min-height: 297mm;
+  min-height: var(--cv-page-height, 297mm);
 }
 
 .main {
@@ -358,6 +367,10 @@ h3 {
 .group-name {
   font-weight: 600;
   margin-bottom: 1mm;
+}
+
+.soft {
+  color: #4b5259;
 }
 
 .skill {

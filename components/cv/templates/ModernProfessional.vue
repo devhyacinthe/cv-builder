@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Profile } from '~/schemas/profile'
 import { formatMonth, formatPeriod } from '~/utils/date'
-import { contactLines, hasContent, socialLines } from '~/utils/cvContent'
+import { contactLines, hasContent, skillNames, socialLines } from '~/utils/cvContent'
 
 /**
  * Modern Professional — colonne latérale sombre, photo circulaire, colonne de
@@ -65,10 +65,14 @@ const socials = computed(() => socialLines(props.profile.personal))
           <h2>Compétences</h2>
           <div v-for="category in profile.skillCategories" :key="category.id" class="group">
             <p class="group-name">{{ category.name }}</p>
-            <div v-for="skill in category.skills" :key="skill.id" class="skill">
-              <span>{{ skill.name }}</span>
-              <span class="bar"><span class="fill" :style="{ width: `${skill.level * 20}%` }" /></span>
-            </div>
+            <!-- Les compétences transversales ne se mesurent pas : pas de barre. -->
+            <p v-if="category.kind === 'soft'" class="soft">{{ skillNames(category.skills) }}</p>
+            <template v-else>
+              <div v-for="skill in category.skills" :key="skill.id" class="skill">
+                <span>{{ skill.name }}</span>
+                <span class="bar"><span class="fill" :style="{ width: `${skill.level * 20}%` }" /></span>
+              </div>
+            </template>
           </div>
         </section>
       </aside>
@@ -152,7 +156,12 @@ const socials = computed(() => socialLines(props.profile.personal))
 /* Le dégradé porte le fond de la colonne : il se répète sur chaque page imprimée. */
 .modern {
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-  background: linear-gradient(to right, #2f363d 0 64mm, #ffffff 64mm);
+  --page-bg: linear-gradient(
+    to right,
+    #2f363d 0 calc(64mm * var(--cv-zoom, 1)),
+    #ffffff calc(64mm * var(--cv-zoom, 1))
+  );
+  background: var(--page-bg);
   print-color-adjust: exact;
   /* Sur la colonne sombre, l'accent est éclairci : une teinte sobre choisie
      pour du texte noir resterait illisible sur fond charbon. */
@@ -162,7 +171,7 @@ const socials = computed(() => socialLines(props.profile.personal))
 .layout {
   display: grid;
   grid-template-columns: 64mm 1fr;
-  min-height: 297mm;
+  min-height: var(--cv-page-height, 297mm);
 }
 
 /* Colonne latérale */
@@ -184,12 +193,16 @@ const socials = computed(() => socialLines(props.profile.personal))
 
 .photo {
   position: relative;
-  width: 34mm;
-  height: 34mm;
-  margin: 6mm auto 6mm;
+  width: 30mm;
+  height: 30mm;
+  margin: 5mm auto 5mm;
   border-radius: 50%;
   overflow: hidden;
   border: 1mm solid #ffffff;
+}
+
+.photo + .identity {
+  margin-top: 0;
 }
 
 .photo img {
@@ -198,19 +211,27 @@ const socials = computed(() => socialLines(props.profile.personal))
   object-fit: cover;
 }
 
+/* Sans photo, l'identité remonterait sous le coin d'accent : on la décale
+   d'au moins la hauteur du coin. */
 .identity {
+  margin-top: 16mm;
+  position: relative;
   margin-bottom: 8mm;
 }
 
 .first,
 .last {
-  font-size: 17pt;
-  line-height: 1.1;
+  font-size: 18pt;
+  line-height: 1.15;
   text-transform: uppercase;
+  overflow-wrap: break-word;
 }
 
+/* Le prénom reste en graisse légère mais doit lire aussi franchement que le
+   nom : blanc pur et interlettrage un peu ouvert sur fond sombre. */
 .first {
-  font-weight: 300;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: #ffffff;
 }
 
@@ -271,6 +292,10 @@ const socials = computed(() => socialLines(props.profile.personal))
 .group-name {
   font-weight: 600;
   margin-bottom: 1mm;
+}
+
+.soft {
+  color: #cfd4d9;
 }
 
 .skill {

@@ -13,5 +13,6 @@ export const navigation: NavItem[] = [
   { label: 'Profil', to: '/profil', icon: 'user', enabled: true },
   { label: 'Mes CV', to: '/cv', icon: 'document', enabled: true },
   { label: 'Lettres de motivation', to: '/lettres', icon: 'mail', enabled: false },
-  { label: 'Analyse ATS', to: '/analyse', icon: 'chart', enabled: false },
+  { label: 'Historique', to: '/historique', icon: 'book', enabled: true },
+  { label: 'Analyse ATS', to: '/analyse', icon: 'chart', enabled: true },
 ]

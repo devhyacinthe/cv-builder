@@ -146,4 +146,5 @@ export const createSampleProfile = (): Profile => ({
   ],
   certifications: [],
   publications: [],
+  interests: ['Course à pied', 'Cuisine', 'Vulgarisation scientifique'],
 })

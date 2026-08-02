@@ -93,8 +93,16 @@ export const skillSchema = entity({
   level: z.number().int().min(1).max(5).catch(3),
 })
 
+/**
+ * Une catégorie regroupe soit des compétences techniques, évaluées par un
+ * niveau, soit des compétences transversales (rigueur, esprit d'équipe…) que
+ * l'on énumère sans les noter.
+ */
+export const skillKinds = ['technical', 'soft'] as const
+
 export const skillCategorySchema = entity({
   name: z.string(),
+  kind: z.enum(skillKinds).catch('technical'),
   skills: z.array(skillSchema),
 })
 
@@ -129,6 +137,8 @@ export const profileSchema = z.object({
   languages: z.array(languageSchema),
   certifications: z.array(certificationSchema),
   publications: z.array(publicationSchema),
+  /** Centres d'intérêt, affichés par les modèles qui prévoient la rubrique. */
+  interests: z.array(z.string()).catch([]),
 })
 
 export type SocialPlatform = (typeof socialPlatforms)[number]
@@ -138,6 +148,7 @@ export type Summary = z.infer<typeof summarySchema>
 export type Experience = z.infer<typeof experienceSchema>
 export type Education = z.infer<typeof educationSchema>
 export type Project = z.infer<typeof projectSchema>
+export type SkillKind = (typeof skillKinds)[number]
 export type Skill = z.infer<typeof skillSchema>
 export type SkillCategory = z.infer<typeof skillCategorySchema>
 export type Language = z.infer<typeof languageSchema>

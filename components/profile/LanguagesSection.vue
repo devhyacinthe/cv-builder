@@ -2,10 +2,13 @@
 import { createLanguage } from '~/utils/factories'
 
 const { items, add, remove, move } = useProfileList('languages', createLanguage)
+
+const { profile } = storeToRefs(useProfileStore())
 </script>
 
 <template>
-  <BaseCard class="@container" title="Langues" description="Niveau et certification éventuelle.">
+  <div class="@container space-y-4">
+  <BaseCard title="Langues" description="Niveau et certification éventuelle.">
     <EditableList
       :items="items"
       add-label="Ajouter une langue"
@@ -35,5 +38,12 @@ const { items, add, remove, move } = useProfileList('languages', createLanguage)
         </div>
       </template>
     </EditableList>
-  </BaseCard>
+    </BaseCard>
+
+    <BaseCard title="Centres d'intérêt" description="Rubrique reprise par les modèles qui la prévoient.">
+      <BaseField label="Vos centres d'intérêt">
+        <TagInput v-model="profile.interests" placeholder="Randonnée, échecs, bénévolat…" />
+      </BaseField>
+    </BaseCard>
+  </div>
 </template>

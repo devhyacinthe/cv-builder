@@ -12,6 +12,9 @@ const props = defineProps<{ profile: Profile; document: CvDocument }>()
 
 const template = computed(() => findTemplate(props.document.templateId))
 
+/** État de l'ajustement « une seule page » remonté par la feuille. */
+const fitState = useCvFitReporter()
+
 /** Élément de mesure : sa largeur est exactement la place disponible. */
 const ruler = useTemplateRef<HTMLElement>('ruler')
 const paper = useTemplateRef<HTMLElement>('paper')
@@ -55,7 +58,20 @@ const percentage = computed(() => Math.round(scale.value * 100))
 <template>
   <div class="flex h-full flex-col">
     <div class="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5">
-      <p class="truncate text-xs text-muted">{{ template.name }} · A4</p>
+      <div class="flex min-w-0 items-center gap-2">
+        <p class="truncate text-xs text-muted">{{ template.name }} · A4</p>
+        <span
+          class="shrink-0 rounded-full px-2 py-0.5 text-[11px] transition-colors duration-200"
+          :class="fitState.overflowing ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'"
+          :title="
+            fitState.overflowing
+              ? 'Retirez des entrées ou raccourcissez vos descriptions.'
+              : `Contenu resserré à ${Math.round(fitState.zoom * 100)} % pour tenir sur une page.`
+          "
+        >
+          {{ fitState.overflowing ? 'Dépasse une page' : '1 page' }}
+        </span>
+      </div>
 
       <div class="flex items-center gap-1">
         <BaseIconButton icon="minus" label="Réduire" @click="setZoom(scale - 0.1)" />
