@@ -13,12 +13,12 @@ const platformOptions = socialPlatforms.map((platform) => ({
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="@container space-y-4">
     <BaseCard title="Informations générales" description="Affichées en tête de chaque CV et lettre.">
       <div class="space-y-5">
         <PhotoInput v-model="personal.photo" />
 
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid gap-4 @md:grid-cols-2">
           <BaseField v-slot="{ id }" label="Prénom" required>
             <BaseInput :id="id" v-model="personal.firstName" />
           </BaseField>
@@ -42,7 +42,7 @@ const platformOptions = socialPlatforms.map((platform) => ({
     </BaseCard>
 
     <BaseCard title="Informations complémentaires" description="Utilisées par les modèles à colonne latérale.">
-      <div class="grid gap-4 sm:grid-cols-3">
+      <div class="grid gap-4 @2xl:grid-cols-3">
         <BaseField v-slot="{ id }" label="Nationalité">
           <BaseInput :id="id" v-model="personal.nationality" />
         </BaseField>
@@ -70,7 +70,7 @@ const platformOptions = socialPlatforms.map((platform) => ({
         </template>
 
         <template #default="{ item }">
-          <div class="grid gap-4 sm:grid-cols-3">
+          <div class="grid gap-4 @2xl:grid-cols-3">
             <BaseField v-slot="{ id }" label="Plateforme">
               <BaseSelect :id="id" v-model="item.platform" :options="platformOptions" />
             </BaseField>

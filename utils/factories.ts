@@ -1,4 +1,5 @@
 import { createId } from '~/utils/id'
+import type { CvDocument } from '~/schemas/document'
 import type {
   Certification,
   Education,
@@ -106,6 +107,15 @@ export const createPublication = (patch: Partial<Publication> = {}): Publication
   venue: '',
   date: '',
   url: '',
+  ...patch,
+})
+
+export const createCvDocument = (patch: Partial<CvDocument> = {}): CvDocument => ({
+  id: createId(),
+  name: 'Mon CV',
+  templateId: 'ats-classic',
+  accent: '#1e3a5f',
+  updatedAt: new Date().toISOString(),
   ...patch,
 })
 

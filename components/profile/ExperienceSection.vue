@@ -6,7 +6,7 @@ const { items, add, remove, move } = useProfileList('experiences', createExperie
 </script>
 
 <template>
-  <BaseCard title="Expériences professionnelles" description="La section la plus scrutée : privilégiez des résultats mesurables.">
+  <BaseCard class="@container" title="Expériences professionnelles" description="La section la plus scrutée : privilégiez des résultats mesurables.">
     <EditableList
       :items="items"
       add-label="Ajouter une expérience"
@@ -25,7 +25,7 @@ const { items, add, remove, move } = useProfileList('experiences', createExperie
 
       <template #default="{ item }">
         <div class="space-y-4">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid gap-4 @md:grid-cols-2">
             <BaseField v-slot="{ id }" label="Poste" required>
               <BaseInput :id="id" v-model="item.position" />
             </BaseField>

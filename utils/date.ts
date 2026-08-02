@@ -12,6 +12,16 @@ export function formatMonth(value: string, style: 'short' | 'long' = 'short'): s
   return capitalize(new Intl.DateTimeFormat('fr-FR', { month: style, year: 'numeric' }).format(date))
 }
 
+/** « 28 ans » à partir d'une date de naissance au mois près. */
+export function age(birthDate: string): string {
+  const match = /^(\d{4})-(\d{2})$/.exec(birthDate)
+  if (!match) return ''
+  const now = new Date()
+  const months = (now.getFullYear() - Number(match[1])) * 12 + (now.getMonth() + 1 - Number(match[2]))
+  const years = Math.floor(months / 12)
+  return years > 0 ? `${years} ans` : ''
+}
+
 /** « 3 ans 4 mois », « 8 mois », « — ». */
 export function formatDuration(months: number): string {
   if (months <= 0) return '—'

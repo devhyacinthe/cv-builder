@@ -18,7 +18,7 @@ const {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="@container space-y-4">
     <BaseCard title="Certifications" description="Certifications professionnelles et techniques.">
       <EditableList
         :items="certifications"
@@ -36,7 +36,7 @@ const {
         </template>
 
         <template #default="{ item }">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid gap-4 @md:grid-cols-2">
             <BaseField v-slot="{ id }" label="Intitulé">
               <BaseInput :id="id" v-model="item.name" />
             </BaseField>
@@ -75,7 +75,7 @@ const {
             <BaseField v-slot="{ id }" label="Titre">
               <BaseInput :id="id" v-model="item.title" />
             </BaseField>
-            <div class="grid gap-4 sm:grid-cols-3">
+            <div class="grid gap-4 @2xl:grid-cols-3">
               <BaseField v-slot="{ id }" label="Auteurs">
                 <BaseInput :id="id" v-model="item.authors" />
               </BaseField>

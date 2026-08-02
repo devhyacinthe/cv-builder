@@ -6,7 +6,7 @@ const { items, add, remove, move } = useProfileList('projects', createProject)
 </script>
 
 <template>
-  <BaseCard title="Projets" description="Vitrine technique : contexte, technologies et résultats obtenus.">
+  <BaseCard class="@container" title="Projets" description="Vitrine technique : contexte, technologies et résultats obtenus.">
     <EditableList
       :items="items"
       add-label="Ajouter un projet"
@@ -24,7 +24,7 @@ const { items, add, remove, move } = useProfileList('projects', createProject)
 
       <template #default="{ item }">
         <div class="space-y-4">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid gap-4 @md:grid-cols-2">
             <BaseField v-slot="{ id }" label="Nom du projet" required>
               <BaseInput :id="id" v-model="item.name" />
             </BaseField>
@@ -47,7 +47,7 @@ const { items, add, remove, move } = useProfileList('projects', createProject)
             <TagInput v-model="item.technologies" />
           </BaseField>
 
-          <div class="grid gap-4 sm:grid-cols-3">
+          <div class="grid gap-4 @2xl:grid-cols-3">
             <BaseField v-slot="{ id }" label="Dépôt">
               <BaseInput :id="id" v-model="item.repositoryUrl" type="url" />
             </BaseField>

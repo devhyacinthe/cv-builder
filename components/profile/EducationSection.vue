@@ -6,7 +6,7 @@ const { items, add, remove, move } = useProfileList('educations', createEducatio
 </script>
 
 <template>
-  <BaseCard title="Formations" description="Diplômes, spécialités et travaux associés.">
+  <BaseCard class="@container" title="Formations" description="Diplômes, spécialités et travaux associés.">
     <EditableList
       :items="items"
       add-label="Ajouter une formation"
@@ -25,7 +25,7 @@ const { items, add, remove, move } = useProfileList('educations', createEducatio
 
       <template #default="{ item }">
         <div class="space-y-4">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid gap-4 @md:grid-cols-2">
             <BaseField v-slot="{ id }" label="Diplôme" required>
               <BaseInput :id="id" v-model="item.degree" />
             </BaseField>

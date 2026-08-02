@@ -11,7 +11,7 @@ withDefaults(defineProps<{ currentLabel?: string; showCurrent?: boolean }>(), {
 </script>
 
 <template>
-  <div class="grid gap-4 sm:grid-cols-2">
+  <div class="grid gap-4 @md:grid-cols-2">
     <BaseField v-slot="{ id }" label="Début">
       <BaseInput :id="id" v-model="start" type="month" />
     </BaseField>

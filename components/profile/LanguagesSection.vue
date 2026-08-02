@@ -5,7 +5,7 @@ const { items, add, remove, move } = useProfileList('languages', createLanguage)
 </script>
 
 <template>
-  <BaseCard title="Langues" description="Niveau et certification éventuelle.">
+  <BaseCard class="@container" title="Langues" description="Niveau et certification éventuelle.">
     <EditableList
       :items="items"
       add-label="Ajouter une langue"
@@ -22,7 +22,7 @@ const { items, add, remove, move } = useProfileList('languages', createLanguage)
       </template>
 
       <template #default="{ item }">
-        <div class="grid gap-4 sm:grid-cols-3">
+        <div class="grid gap-4 @2xl:grid-cols-3">
           <BaseField v-slot="{ id }" label="Langue">
             <BaseInput :id="id" v-model="item.name" />
           </BaseField>

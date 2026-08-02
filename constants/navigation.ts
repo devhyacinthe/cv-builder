@@ -11,7 +11,7 @@ export interface NavItem {
 export const navigation: NavItem[] = [
   { label: 'Tableau de bord', to: '/', icon: 'dashboard', enabled: true },
   { label: 'Profil', to: '/profil', icon: 'user', enabled: true },
-  { label: 'Mes CV', to: '/cv', icon: 'document', enabled: false },
+  { label: 'Mes CV', to: '/cv', icon: 'document', enabled: true },
   { label: 'Lettres de motivation', to: '/lettres', icon: 'mail', enabled: false },
   { label: 'Analyse ATS', to: '/analyse', icon: 'chart', enabled: false },
 ]

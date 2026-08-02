@@ -70,7 +70,8 @@ const initials = computed(() => {
     </aside>
 
     <main class="flex-1 lg:h-screen lg:overflow-y-auto">
-      <div class="mx-auto max-w-5xl px-5 py-8 sm:px-8">
+      <!-- Les pages d'aperçu de document réclament plus de largeur : `wide` dans leur meta. -->
+      <div class="mx-auto px-5 py-8 sm:px-8" :class="route.meta.wide === true ? 'max-w-[1600px]' : 'max-w-5xl'">
         <slot />
       </div>
     </main>
