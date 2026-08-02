@@ -46,9 +46,11 @@ de génération.
 
 ## Déploiement
 
-`.github/workflows/deploy.yml` publie automatiquement sur GitHub Pages à chaque push sur `main`. Le
-workflow active Pages lui-même au premier passage (`enablement: true`) ; si l'organisation l'interdit,
-faites-le une fois à la main : **Settings → Pages → Source : GitHub Actions**.
+`.github/workflows/deploy.yml` publie automatiquement sur GitHub Pages à chaque push sur `main`.
+
+Une seule opération manuelle, à faire une fois : **Settings → Pages → Build and deployment →
+Source : GitHub Actions**. Le jeton du workflow n'a pas le droit de créer le site lui-même ; tant que
+ce réglage n'est pas posé, le déploiement échoue sur `Get Pages site failed`.
 
 Le site est servi sur `https://<compte>.github.io/<dépôt>/` ; le chemin de base est injecté au build
 via `NUXT_APP_BASE_URL`, il n'y a rien à modifier dans le code.
