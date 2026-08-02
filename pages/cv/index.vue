@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const documentStore = useDocumentStore()
 const { documents } = storeToRefs(documentStore)
-const { exportCv } = useCvExport()
+const { exportCv } = useDocumentExport()
 const router = useRouter()
 
 function open(id: string) {
@@ -46,7 +46,7 @@ function remove(id: string, name: string) {
       tag="div"
       class="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      <DocumentCard
+      <CvCard
         v-for="document in documents"
         :key="document.id"
         :document="document"

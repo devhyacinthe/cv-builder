@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { cvFitKey } from '~/composables/useCvFit'
+import { paperFitKey } from '~/composables/usePaperFit'
 
 /**
- * Feuille A4. Seul composant à connaître les dimensions physiques du document.
+ * Feuille A4, partagée par les CV et les lettres de motivation.
+ * Seul composant à connaître les dimensions physiques du document.
  *
- * Il assure aussi la règle d'or du CV : **tenir sur une seule page**. Le
- * contenu est resserré automatiquement jusqu'à une densité plancher ; les
- * textes se recomposent (aucune déformation), et au-delà du plancher la feuille
- * signale le débordement pour que l'utilisateur retire des entrées.
+ * Il assure aussi la règle d'or : **tenir sur une seule page**. Le contenu est
+ * resserré automatiquement jusqu'à une densité plancher ; les textes se
+ * recomposent (aucune déformation), et au-delà du plancher la feuille signale
+ * le débordement pour que l'utilisateur retire des entrées.
  */
 defineProps<{ accent: string }>()
 
@@ -18,7 +19,7 @@ const MIN_ZOOM = 0.72
 const page = useTemplateRef<HTMLElement>('page')
 const content = useTemplateRef<HTMLElement>('content')
 
-const report = inject(cvFitKey, null)
+const report = inject(paperFitKey, null)
 
 let busy = false
 
@@ -29,7 +30,7 @@ function fit() {
 
   // Mesure à densité nominale, puis application du facteur retenu.
   inner.style.zoom = '1'
-  inner.style.setProperty('--cv-page-height', '297mm')
+  inner.style.setProperty('--paper-height', '297mm')
 
   const styles = getComputedStyle(article)
   const padding = Number.parseFloat(styles.paddingTop) + Number.parseFloat(styles.paddingBottom)
@@ -38,9 +39,9 @@ function fit() {
 
   const zoom = Math.min(1, Math.max(MIN_ZOOM, available / natural))
   inner.style.zoom = String(zoom)
-  inner.style.setProperty('--cv-page-height', `calc((297mm - ${padding}px) / ${zoom})`)
+  inner.style.setProperty('--paper-height', `calc((297mm - ${padding}px) / ${zoom})`)
   // Le fond de page, peint hors du contenu resserré, doit suivre le même facteur.
-  article.style.setProperty('--cv-zoom', String(zoom))
+  article.style.setProperty('--paper-zoom', String(zoom))
 
   report?.({ zoom, overflowing: natural * zoom > available + 1 })
 }
@@ -64,15 +65,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <article ref="page" class="cv-page" :style="{ '--cv-accent': accent }">
-    <div ref="content" class="cv-content">
+  <article ref="page" class="paper-sheet" :style="{ '--paper-accent': accent }">
+    <div ref="content" class="paper-content">
       <slot />
     </div>
   </article>
 </template>
 
 <style scoped>
-.cv-page {
+.paper-sheet {
   box-sizing: border-box;
   width: 210mm;
   min-height: 297mm;

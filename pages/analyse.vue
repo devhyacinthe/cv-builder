@@ -15,7 +15,7 @@ const rendered = computed(() => documentProfile(profileStore.profile, document.v
 const template = computed(() => findTemplate(document.value.templateId))
 
 /** L'aperçu rend la feuille : on récupère son verdict « tient sur une page ». */
-const fitState = useCvFitReporter()
+const fitState = usePaperFitReporter()
 
 const offer = ref('')
 

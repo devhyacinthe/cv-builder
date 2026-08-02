@@ -1,5 +1,13 @@
 import tailwindcss from '@tailwindcss/vite'
 
+/**
+ * GitHub Pages sert le site depuis /<dépôt>/ : le workflow fournit cette base au
+ * moment du build. Lecture sans `@types/node` — une dépendance de plus pour une
+ * seule variable ne se justifie pas.
+ */
+const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env
+const baseURL = env?.NUXT_APP_BASE_URL ?? '/'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   // Application 100 % cliente : aucun backend, déployable en statique.
@@ -12,6 +20,7 @@ export default defineNuxtConfig({
   vite: { plugins: [tailwindcss()] },
   typescript: { strict: true, typeCheck: false },
   app: {
+    baseURL,
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       title: 'CV Builder ATS',

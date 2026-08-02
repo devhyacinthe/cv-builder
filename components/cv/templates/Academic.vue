@@ -14,7 +14,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
 </script>
 
 <template>
-  <CvPage :accent="accent" class="academic">
+  <PaperSheet :accent="accent" class="academic">
     <header class="head">
       <div class="frame">
         <h1>{{ fullName(profile.personal) || 'Prénom Nom' }}</h1>
@@ -109,7 +109,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
         {{ profile.languages.map((language) => [language.name, language.level].filter(Boolean).join(', ')).join('  ·  ') }}
       </p>
     </section>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -144,7 +144,7 @@ h1 {
   display: block;
   width: 16mm;
   height: 0.75pt;
-  background: var(--cv-accent);
+  background: var(--paper-accent);
   margin: 2mm auto;
 }
 
@@ -169,7 +169,7 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
   border-bottom: 0.5pt solid #b6b6b6;
   padding-bottom: 1.2mm;
   margin-bottom: 2.5mm;

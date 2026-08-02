@@ -15,7 +15,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
 </script>
 
 <template>
-  <CvPage :accent="accent" class="centered">
+  <PaperSheet :accent="accent" class="centered">
     <header class="head">
       <div v-if="profile.personal.photo" class="photo">
         <img :src="profile.personal.photo" alt="" />
@@ -89,7 +89,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
         {{ [certification.name, certification.issuer].filter(Boolean).join(' · ') }}
       </p>
     </section>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -97,7 +97,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
   padding: 14mm 18mm;
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   color: #1f1f1f;
-  --grid-fill: var(--cv-accent);
+  --grid-fill: var(--paper-accent);
   --grid-track: #e2e5e9;
   --grid-label: #5a5a5a;
 }
@@ -132,7 +132,7 @@ h1 {
   font-size: 10pt;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
 }
 
 .contact {

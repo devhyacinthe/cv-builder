@@ -66,8 +66,16 @@ export const useDocumentStore = defineStore('documents', () => {
 
   const selectDocument = (id: string) => (library.value.activeId = id)
 
+  /** Bibliothèque brute : sauvegarde et restauration intégrales. */
+  const snapshot = computed(() => library.value)
+  const replaceLibrary = (next: CvLibrary) => (library.value = cvLibrarySchema.parse(next))
+  const resetLibrary = () => (library.value = createLibrary())
+
   return {
     documents,
+    snapshot,
+    replaceLibrary,
+    resetLibrary,
     activeDocument,
     byId,
     addDocument,

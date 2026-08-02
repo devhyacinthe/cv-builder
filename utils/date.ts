@@ -31,6 +31,25 @@ export function formatDuration(months: number): string {
   return parts.filter(Boolean).join(' ')
 }
 
+/** Horodatage d'un document (« 2 août 2026 », heure comprise si demandée). */
+export function formatStamp(iso: string, withTime = false): string {
+  if (!iso) return ''
+  const options: Intl.DateTimeFormatOptions = withTime
+    ? { dateStyle: 'medium', timeStyle: 'short' }
+    : { dateStyle: 'medium' }
+  return new Intl.DateTimeFormat('fr-FR', options).format(new Date(iso))
+}
+
+/** Date en toutes lettres pour l'en-tête d'une lettre : « 2 août 2026 ». */
+export function formatLongDate(isoDay: string): string {
+  const date = isoDay ? new Date(`${isoDay}T00:00:00`) : new Date()
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date)
+}
+
+/** Jour courant au format « 2026-08-02 », valeur attendue par un champ date. */
+export const today = (): string => new Date().toISOString().slice(0, 10)
+
 export interface Period {
   startDate: string
   endDate: string

@@ -8,7 +8,7 @@ definePageMeta({ wide: true })
 const route = useRoute()
 const profileStore = useProfileStore()
 const documentStore = useDocumentStore()
-const { exportCv } = useCvExport()
+const { exportCv } = useDocumentExport()
 
 const documentId = computed(() => String(route.params.id))
 
@@ -85,13 +85,14 @@ const update = (patch: Parameters<typeof documentStore.updateActive>[0]) =>
                   <TemplateCard
                     v-for="template in cvTemplates"
                     :key="template.id"
-                    :template="template"
-                    :profile="rendered"
-                    :accent="document.accent"
+                    :name="template.name"
+                    :hint="`Compatibilité ATS ${template.atsSafety}`"
                     :selected="template.id === document.templateId"
                     :title="template.description"
                     @click="update({ templateId: template.id })"
-                  />
+                  >
+                    <component :is="template.component" :profile="rendered" :accent="document.accent" />
+                  </TemplateCard>
                 </div>
               </div>
             </BaseCard>
@@ -117,7 +118,10 @@ const update = (patch: Parameters<typeof documentStore.updateActive>[0]) =>
         </Transition>
       </div>
 
-      <div class="overflow-hidden rounded-lg border border-line bg-surface xl:sticky xl:top-6 xl:h-[calc(100vh-3rem)]">
+      <!-- Hors grand écran, l'aperçu passe sous le formulaire : il lui faut sa propre hauteur. -->
+      <div
+        class="h-[70vh] overflow-hidden rounded-lg border border-line bg-surface xl:sticky xl:top-6 xl:h-[calc(100vh-3rem)]"
+      >
         <CvPreview :profile="rendered" :document="document">
           <template #actions>
             <BaseIconButton icon="document" label="Télécharger en PDF" @click="exportCv(document.id)" />

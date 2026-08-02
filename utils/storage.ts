@@ -46,3 +46,16 @@ export function writeState<T>(key: string, data: T): void {
 export function clearState(key: string): void {
   storage()?.removeItem(storageKey(key))
 }
+
+/** Poids total des données conservées par l'application, en octets. */
+export function storedBytes(): number {
+  const store = storage()
+  if (!store) return 0
+
+  let total = 0
+  for (let index = 0; index < store.length; index += 1) {
+    const key = store.key(index)
+    if (key?.startsWith(`${NAMESPACE}:`)) total += key.length + (store.getItem(key)?.length ?? 0)
+  }
+  return total
+}

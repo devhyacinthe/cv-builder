@@ -1,5 +1,7 @@
 import { createId } from '~/utils/id'
+import { today } from '~/utils/date'
 import type { CvDocument } from '~/schemas/document'
+import type { Letter } from '~/schemas/letter'
 import type {
   Certification,
   Education,
@@ -121,6 +123,31 @@ export const createCvDocument = (patch: Partial<CvDocument> = {}): CvDocument =>
   exportedAt: '',
   hiddenIds: [],
   hiddenSections: [],
+  ...patch,
+})
+
+/** Formule de politesse par défaut : la plus neutre du registre professionnel. */
+export const DEFAULT_CLOSING =
+  'Dans l’attente de votre réponse, je vous prie d’agréer, Madame, Monsieur, l’expression de mes salutations distinguées.'
+
+export const createLetter = (patch: Partial<Letter> = {}): Letter => ({
+  id: createId(),
+  name: 'Ma lettre',
+  templateId: 'classic',
+  accent: '#1e3a5f',
+  cvId: '',
+  recipient: { company: '', contact: '', address: '', city: '' },
+  position: '',
+  reference: '',
+  subject: '',
+  place: '',
+  date: today(),
+  salutation: 'Madame, Monsieur,',
+  body: { introduction: '', profile: '', skills: '', motivation: '', conclusion: '' },
+  closing: DEFAULT_CLOSING,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  exportedAt: '',
   ...patch,
 })
 

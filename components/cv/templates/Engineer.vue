@@ -30,7 +30,7 @@ const stack = computed(() => {
 </script>
 
 <template>
-  <CvPage :accent="accent" class="engineer">
+  <PaperSheet :accent="accent" class="engineer">
     <div class="layout">
       <main class="main">
         <header class="head">
@@ -154,7 +154,7 @@ const stack = computed(() => {
         </section>
       </aside>
     </div>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -163,8 +163,8 @@ const stack = computed(() => {
   color: #1f2429;
   --page-bg: linear-gradient(
     to right,
-    #ffffff 0 calc(138mm * var(--cv-zoom, 1)),
-    #f2f4f6 calc(138mm * var(--cv-zoom, 1))
+    #ffffff 0 calc(138mm * var(--paper-zoom, 1)),
+    #f2f4f6 calc(138mm * var(--paper-zoom, 1))
   );
   background: var(--page-bg);
   print-color-adjust: exact;
@@ -173,7 +173,7 @@ const stack = computed(() => {
 .layout {
   display: grid;
   grid-template-columns: 138mm 72mm;
-  min-height: var(--cv-page-height, 297mm);
+  min-height: var(--paper-height, 297mm);
 }
 
 .main {
@@ -197,7 +197,7 @@ h1 {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
 }
 
 .lead {
@@ -220,7 +220,7 @@ h2 {
   text-transform: uppercase;
   padding-bottom: 1.5mm;
   margin-bottom: 3mm;
-  border-bottom: 1.5pt solid var(--cv-accent);
+  border-bottom: 1.5pt solid var(--paper-accent);
   width: fit-content;
   padding-right: 6mm;
 }
@@ -308,7 +308,7 @@ h3 {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
   margin-bottom: 2.5mm;
 }
 
@@ -388,6 +388,6 @@ h3 {
 .fill {
   display: block;
   height: 100%;
-  background: var(--cv-accent);
+  background: var(--paper-accent);
 }
 </style>

@@ -16,7 +16,7 @@ const socials = computed(() => socialLines(props.profile.personal))
 </script>
 
 <template>
-  <CvPage :accent="accent" class="impact">
+  <PaperSheet :accent="accent" class="impact">
     <div class="layout">
       <aside class="side">
         <div v-if="profile.personal.photo" class="photo">
@@ -123,7 +123,7 @@ const socials = computed(() => socialLines(props.profile.personal))
         </section>
       </main>
     </div>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -132,13 +132,13 @@ const socials = computed(() => socialLines(props.profile.personal))
   color: #22262a;
   --page-bg: linear-gradient(
     to right,
-    var(--cv-accent) 0 calc(66mm * var(--cv-zoom, 1)),
-    #ffffff calc(66mm * var(--cv-zoom, 1))
+    var(--paper-accent) 0 calc(66mm * var(--paper-zoom, 1)),
+    #ffffff calc(66mm * var(--paper-zoom, 1))
   );
   background: var(--page-bg);
   print-color-adjust: exact;
-  --accent-ink: color-mix(in srgb, var(--cv-accent) 78%, #000000);
-  --grid-fill: var(--cv-accent);
+  --accent-ink: color-mix(in srgb, var(--paper-accent) 78%, #000000);
+  --grid-fill: var(--paper-accent);
   --grid-track: #e3e6ea;
   --grid-label: #4a4a4a;
 }
@@ -146,7 +146,7 @@ const socials = computed(() => socialLines(props.profile.personal))
 .layout {
   display: grid;
   grid-template-columns: 66mm 1fr;
-  min-height: var(--cv-page-height, 297mm);
+  min-height: var(--paper-height, 297mm);
 }
 
 /* Colonne d'accent */

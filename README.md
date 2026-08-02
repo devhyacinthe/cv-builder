@@ -16,19 +16,42 @@ npm run generate   # site statique dans .output/public
 
 ```
 schemas/      Modèle de données (Zod) — source de vérité des types
-stores/       État applicatif (Pinia) : profil, documents
-composables/  Logique réutilisable (persistance…)
-utils/        Fonctions pures (dates, collections, stockage)
-components/   base/ : kit d'interface — cv/ : rendu des documents
+stores/       État applicatif (Pinia) : profil, CV, lettres
+composables/  Logique réutilisable (persistance, export, sauvegarde)
+utils/        Fonctions pures (dates, collections, stockage, analyse ATS)
+components/   base/ : kit d'interface — document/ : feuille A4 partagée
+              cv/ et letter/ : rendu des deux familles de documents
 pages/        Écrans de l'éditeur
 ```
 
-Principes : le profil est saisi une seule fois et alimente tous les documents ; les templates sont
-des composants indépendants qui ne modifient jamais les données ; la logique reste séparée de
-l'affichage.
+Principes : le profil est saisi une seule fois et alimente tous les documents ; les modèles sont des
+composants indépendants qui ne modifient jamais les données ; la logique reste séparée de
+l'affichage. La feuille A4 est mutualisée — CV et lettres tiennent sur **une seule page**, resserrée
+automatiquement jusqu'à une densité plancher.
+
+Ajouter un modèle = créer son composant puis l'inscrire dans `constants/cvTemplates.ts` ou
+`constants/letterTemplates.ts`. Rien d'autre ne change.
+
+## Données
+
+Tout est conservé dans le `localStorage` de ce navigateur, dans une enveloppe versionnée relue à
+travers les schémas Zod. L'écran **Mes données** exporte l'ensemble (profil + CV + lettres) dans un
+fichier JSON unique et le restaure à l'identique, sur cet appareil comme sur un autre.
+
+## Export PDF
+
+Le document est rendu dans une page dédiée puis confié au moteur d'impression du navigateur : le
+PDF obtenu contient du vrai texte sélectionnable, donc lisible par les ATS, sans aucune dépendance
+de génération.
+
+## Déploiement
+
+`.github/workflows/deploy.yml` publie automatiquement sur GitHub Pages à chaque push sur `main`.
+Activez-le une fois : **Settings → Pages → Source : GitHub Actions**. Le site devient disponible sur
+`https://<compte>.github.io/<dépôt>/` ; le chemin de base est injecté au build via
+`NUXT_APP_BASE_URL`, il n'y a rien à modifier dans le code.
 
 ## Pile technique
 
 Nuxt 3 (rendu client uniquement) · Vue 3 · TypeScript strict · Tailwind CSS 4 · Pinia · Zod.
-Aucune dépendance supplémentaire : l'export PDF s'appuiera sur le moteur d'impression du
-navigateur, ce qui garantit un texte sélectionnable, donc lisible par les ATS.
+Cinq dépendances au total : icônes, graphiques, animations et export PDF sont écrits à la main.

@@ -16,7 +16,7 @@ const socials = computed(() => socialLines(props.profile.personal))
 </script>
 
 <template>
-  <CvPage :accent="accent" class="modern">
+  <PaperSheet :accent="accent" class="modern">
     <div class="layout">
       <aside class="side">
         <div class="corner" />
@@ -149,7 +149,7 @@ const socials = computed(() => socialLines(props.profile.personal))
         </section>
       </main>
     </div>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -158,20 +158,20 @@ const socials = computed(() => socialLines(props.profile.personal))
   font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
   --page-bg: linear-gradient(
     to right,
-    #2f363d 0 calc(64mm * var(--cv-zoom, 1)),
-    #ffffff calc(64mm * var(--cv-zoom, 1))
+    #2f363d 0 calc(64mm * var(--paper-zoom, 1)),
+    #ffffff calc(64mm * var(--paper-zoom, 1))
   );
   background: var(--page-bg);
   print-color-adjust: exact;
   /* Sur la colonne sombre, l'accent est éclairci : une teinte sobre choisie
      pour du texte noir resterait illisible sur fond charbon. */
-  --accent-on-dark: color-mix(in srgb, var(--cv-accent) 45%, #ffffff);
+  --accent-on-dark: color-mix(in srgb, var(--paper-accent) 45%, #ffffff);
 }
 
 .layout {
   display: grid;
   grid-template-columns: 64mm 1fr;
-  min-height: var(--cv-page-height, 297mm);
+  min-height: var(--paper-height, 297mm);
 }
 
 /* Colonne latérale */
@@ -361,7 +361,7 @@ const socials = computed(() => socialLines(props.profile.personal))
 
 .what .org {
   font-size: 9.5pt;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
   margin-top: 0.3mm;
 }
 

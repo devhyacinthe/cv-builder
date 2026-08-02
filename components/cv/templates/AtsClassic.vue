@@ -14,7 +14,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
 </script>
 
 <template>
-  <CvPage :accent="accent" class="ats">
+  <PaperSheet :accent="accent" class="ats">
     <header class="head">
       <h1 class="name">{{ fullName(profile.personal) || 'Prénom Nom' }}</h1>
       <p v-if="profile.personal.title" class="title">{{ profile.personal.title }}</p>
@@ -116,7 +116,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
         {{ [publication.authors, publication.title, publication.venue, formatMonth(publication.date)].filter(Boolean).join('. ') }}
       </p>
     </section>
-  </CvPage>
+  </PaperSheet>
 </template>
 
 <style scoped>
@@ -128,7 +128,7 @@ const contacts = computed(() => contactItems(props.profile.personal))
 }
 
 .head {
-  border-bottom: 1.5pt solid var(--cv-accent);
+  border-bottom: 1.5pt solid var(--paper-accent);
   padding-bottom: 3mm;
   margin-bottom: 5mm;
 }
@@ -167,7 +167,7 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--cv-accent);
+  color: var(--paper-accent);
   border-bottom: 0.5pt solid #cccccc;
   padding-bottom: 1mm;
   margin-bottom: 2.5mm;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { findTemplate } from '~/constants/cvTemplates'
+import { findLetterTemplate } from '~/constants/letterTemplates'
 import { documentProfile } from '~/utils/cvDocument'
 
 /**
@@ -11,12 +12,28 @@ definePageMeta({ layout: false })
 const route = useRoute()
 const profileStore = useProfileStore()
 const documentStore = useDocumentStore()
+const letterStore = useLetterStore()
 
-const document = computed(() => documentStore.byId(String(route.query.cv ?? '')) ?? documentStore.activeDocument)
-const template = computed(() => findTemplate(document.value.templateId))
-const rendered = computed(() => documentProfile(profileStore.profile, document.value))
+/** L'URL désigne le document à imprimer : `?cv=` ou `?lettre=`. */
+const printed = computed(() => {
+  const letter = letterStore.byId(String(route.query.lettre ?? ''))
+  if (letter) {
+    return {
+      title: letter.name || 'Lettre de motivation',
+      component: findLetterTemplate(letter.templateId).component,
+      props: { letter, profile: profileStore.profile, accent: letter.accent },
+    }
+  }
 
-useHead({ title: document.value.name || 'CV' })
+  const document = documentStore.byId(String(route.query.cv ?? '')) ?? documentStore.activeDocument
+  return {
+    title: document.name || 'CV',
+    component: findTemplate(document.templateId).component,
+    props: { profile: documentProfile(profileStore.profile, document), accent: document.accent },
+  }
+})
+
+useHead({ title: () => printed.value.title })
 
 const print = () => window.print()
 const close = () => window.close()
@@ -33,7 +50,7 @@ function paintPageBackground() {
   const background = styles.getPropertyValue('--page-bg').trim()
   if (!background) return
   const root = window.document.documentElement.style
-  root.setProperty('--cv-zoom', styles.getPropertyValue('--cv-zoom').trim() || '1')
+  root.setProperty('--paper-zoom', styles.getPropertyValue('--paper-zoom').trim() || '1')
   root.setProperty('--page-bg', background)
 }
 
@@ -60,7 +77,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <component :is="template.component" :profile="rendered" :accent="document.accent" />
+    <component :is="printed.component" v-bind="printed.props" />
   </div>
 </template>
 
