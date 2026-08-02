@@ -12,6 +12,15 @@ export function formatMonth(value: string, style: 'short' | 'long' = 'short'): s
   return capitalize(new Intl.DateTimeFormat('fr-FR', { month: style, year: 'numeric' }).format(date))
 }
 
+/** « 3 ans 4 mois », « 8 mois », « — ». */
+export function formatDuration(months: number): string {
+  if (months <= 0) return '—'
+  const years = Math.floor(months / 12)
+  const rest = months % 12
+  const parts = [years > 0 ? `${years} an${years > 1 ? 's' : ''}` : '', rest > 0 ? `${rest} mois` : '']
+  return parts.filter(Boolean).join(' ')
+}
+
 export interface Period {
   startDate: string
   endDate: string

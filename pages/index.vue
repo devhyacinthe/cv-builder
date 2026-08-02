@@ -1,63 +1,83 @@
 <script setup lang="ts">
-const profileStore = useProfileStore()
-const { profile } = storeToRefs(profileStore)
+import { createSampleProfile } from '~/constants/sampleProfile'
+import { formatDuration } from '~/utils/date'
+import { activityByYear, experienceMonths, skillCount, skillsByCategory, topTechnologies } from '~/utils/profileStats'
 
-const sections = computed(() => [
-  { label: 'Expériences', count: profile.value.experiences.length },
-  { label: 'Formations', count: profile.value.educations.length },
-  { label: 'Projets', count: profile.value.projects.length },
-  { label: 'Catégories de compétences', count: profile.value.skillCategories.length },
-  { label: 'Langues', count: profile.value.languages.length },
-  { label: 'Certifications', count: profile.value.certifications.length },
+const profileStore = useProfileStore()
+const profile = computed(() => profileStore.profile)
+
+const stats = computed(() => [
+  { label: 'Expériences', value: profile.value.experiences.length, icon: 'briefcase' as const },
+  {
+    label: 'Expérience cumulée',
+    value: formatDuration(experienceMonths(profile.value)),
+    icon: 'chart' as const,
+  },
+  { label: 'Projets', value: profile.value.projects.length, icon: 'code' as const },
+  {
+    label: 'Compétences',
+    value: skillCount(profile.value),
+    hint: `${profile.value.skillCategories.length} catégories`,
+    icon: 'star' as const,
+  },
 ])
 
-function confirmReset() {
-  if (confirm('Effacer définitivement toutes les données du profil ?')) profileStore.resetProfile()
+const categories = computed(() => skillsByCategory(profile.value))
+const technologies = computed(() => topTechnologies(profile.value))
+const activity = computed(() => activityByYear(profile.value))
+
+function loadSample() {
+  if (!profileStore.isEmpty && !confirm('Remplacer le profil actuel par le profil de démonstration ?')) return
+  profileStore.replaceProfile(createSampleProfile())
 }
 </script>
 
 <template>
   <div class="space-y-6">
-    <header>
-      <h1 class="text-xl font-semibold tracking-tight">Tableau de bord</h1>
-      <p class="mt-1 text-sm text-muted">
-        Vos données sont enregistrées dans ce navigateur et réutilisées par tous vos CV.
-      </p>
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight">Tableau de bord</h1>
+        <p class="mt-1 text-sm text-muted">
+          Vos données restent dans ce navigateur et alimentent tous vos CV.
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <BaseButton v-if="profileStore.isEmpty" size="sm" @click="loadSample">
+          <BaseIcon name="plus" :size="16" />
+          Charger un exemple
+        </BaseButton>
+        <BaseButton variant="primary" size="sm" to="/profil">
+          <BaseIcon name="user" :size="16" />
+          Compléter mon profil
+        </BaseButton>
+      </div>
     </header>
 
-    <BaseCard title="Identité" description="Informations affichées en tête de chaque document.">
-      <div class="grid gap-4 sm:grid-cols-2">
-        <BaseField v-slot="{ id }" label="Prénom">
-          <BaseInput :id="id" v-model="profile.personal.firstName" />
-        </BaseField>
-        <BaseField v-slot="{ id }" label="Nom">
-          <BaseInput :id="id" v-model="profile.personal.lastName" />
-        </BaseField>
-        <BaseField v-slot="{ id }" label="Titre professionnel">
-          <BaseInput :id="id" v-model="profile.personal.title" />
-        </BaseField>
-        <BaseField v-slot="{ id }" label="Email">
-          <BaseInput :id="id" v-model="profile.personal.email" type="email" />
-        </BaseField>
-      </div>
-    </BaseCard>
+    <ProfileCompletion />
 
-    <BaseCard title="Contenu du profil" description="Les sections se remplissent depuis l'éditeur.">
-      <dl class="grid gap-3 sm:grid-cols-3">
-        <div v-for="section in sections" :key="section.label" class="rounded-md border border-line px-4 py-3">
-          <dt class="text-xs text-muted">{{ section.label }}</dt>
-          <dd class="mt-1 text-lg font-semibold tabular-nums">{{ section.count }}</dd>
-        </div>
-      </dl>
-    </BaseCard>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <StatTile
+        v-for="stat in stats"
+        :key="stat.label"
+        :label="stat.label"
+        :value="stat.value"
+        :hint="stat.hint"
+        :icon="stat.icon"
+      />
+    </div>
 
-    <BaseCard title="Données locales">
-      <template #actions>
-        <BaseButton variant="danger" size="sm" @click="confirmReset">Réinitialiser</BaseButton>
-      </template>
-      <p class="text-sm text-muted">
-        Aucune information n'est envoyée sur un serveur. Fermer puis rouvrir le navigateur conserve le profil.
-      </p>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <BaseCard title="Compétences par catégorie" description="Répartition des compétences saisies.">
+        <ChartBars :data="categories" empty="Ajoutez des compétences pour voir leur répartition." />
+      </BaseCard>
+
+      <BaseCard title="Technologies les plus présentes" description="Expériences et projets confondus.">
+        <ChartBars :data="technologies" empty="Renseignez les technologies de vos expériences." />
+      </BaseCard>
+    </div>
+
+    <BaseCard title="Activité par année" description="Expériences et projets actifs sur chaque année.">
+      <ChartColumns :data="activity" />
     </BaseCard>
   </div>
 </template>

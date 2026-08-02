@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   vite: { plugins: [tailwindcss()] },
   typescript: { strict: true, typeCheck: false },
   app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       title: 'CV Builder ATS',
       htmlAttrs: { lang: 'fr' },

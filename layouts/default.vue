@@ -2,48 +2,75 @@
 import { navigation } from '~/constants/navigation'
 
 const profileStore = useProfileStore()
+const route = useRoute()
+
+const menuOpen = ref(false)
+watch(() => route.fullPath, () => (menuOpen.value = false))
+
+const initials = computed(() => {
+  const { firstName, lastName } = profileStore.profile.personal
+  return `${firstName.at(0) ?? ''}${lastName.at(0) ?? ''}`.toUpperCase() || '—'
+})
 </script>
 
 <template>
   <div class="min-h-screen lg:flex">
-    <aside class="border-b border-line bg-surface lg:h-screen lg:w-64 lg:shrink-0 lg:border-r lg:border-b-0">
-      <div class="flex items-center justify-between px-5 py-5 lg:block">
-        <div>
-          <p class="text-sm font-semibold tracking-tight text-ink">CV Builder</p>
-          <p class="text-xs text-muted">Générateur de CV compatibles ATS</p>
-        </div>
+    <aside
+      class="sticky top-0 z-20 border-b border-line bg-surface/85 backdrop-blur-sm lg:flex lg:h-screen lg:w-64 lg:shrink-0 lg:flex-col lg:border-r lg:border-b-0 lg:backdrop-blur-none"
+    >
+      <div class="flex items-center justify-between px-5 py-4">
+        <NuxtLink to="/" class="group flex items-center gap-2.5">
+          <span
+            class="grid h-9 w-9 place-items-center rounded-lg bg-brand text-sm font-semibold text-white transition-transform duration-200 group-hover:scale-105"
+          >
+            CV
+          </span>
+          <span>
+            <span class="block text-sm font-semibold tracking-tight">CV Builder</span>
+            <span class="block text-[11px] text-muted">Optimisé ATS</span>
+          </span>
+        </NuxtLink>
+
+        <button
+          class="rounded-md p-2 text-muted transition-colors hover:bg-canvas hover:text-ink lg:hidden"
+          :aria-expanded="menuOpen"
+          aria-label="Ouvrir la navigation"
+          @click="menuOpen = !menuOpen"
+        >
+          <BaseIcon :name="menuOpen ? 'close' : 'dashboard'" />
+        </button>
       </div>
 
-      <nav class="px-3 pb-4">
+      <nav class="hidden flex-1 px-3 pb-4 lg:block">
         <ul class="space-y-0.5">
           <li v-for="item in navigation" :key="item.to">
-            <NuxtLink
-              v-if="item.enabled"
-              :to="item.to"
-              class="block rounded-md px-3 py-2 text-sm text-muted transition-colors hover:bg-canvas hover:text-ink"
-              active-class="bg-brand-soft font-medium text-brand"
-            >
-              {{ item.label }}
-            </NuxtLink>
-            <span
-              v-else
-              class="flex items-center justify-between rounded-md px-3 py-2 text-sm text-muted/50"
-              :title="'Module à venir'"
-            >
-              {{ item.label }}
-              <span class="text-[10px] tracking-wide uppercase">bientôt</span>
-            </span>
+            <AppNavLink :item="item" />
           </li>
         </ul>
       </nav>
 
-      <p class="hidden px-5 text-xs text-muted lg:block">
-        {{ profileStore.fullName || 'Profil non renseigné' }}
-      </p>
+      <Transition name="collapse">
+        <nav v-if="menuOpen" class="lg:hidden">
+          <ul class="space-y-0.5 px-3 pb-4">
+            <li v-for="item in navigation" :key="item.to">
+              <AppNavLink :item="item" />
+            </li>
+          </ul>
+        </nav>
+      </Transition>
+
+      <div class="hidden items-center gap-3 border-t border-line px-5 py-4 lg:flex">
+        <span class="grid h-8 w-8 place-items-center rounded-full bg-brand-soft text-xs font-semibold text-brand">
+          {{ initials }}
+        </span>
+        <span class="truncate text-xs text-muted">
+          {{ profileStore.fullName || 'Profil non renseigné' }}
+        </span>
+      </div>
     </aside>
 
     <main class="flex-1 lg:h-screen lg:overflow-y-auto">
-      <div class="mx-auto max-w-5xl px-5 py-8">
+      <div class="mx-auto max-w-5xl px-5 py-8 sm:px-8">
         <slot />
       </div>
     </main>

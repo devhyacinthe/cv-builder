@@ -17,11 +17,38 @@
   --color-brand: #1e40af;
   --color-brand-soft: #eef2ff;
   --color-danger: #b42318;
+  --color-success: #067647;
+
+  /* Palette des graphiques — validée pour la vision des couleurs sur fond blanc. */
+  --color-series-1: #2a78d6;
+  --color-series-2: #eb6834;
+  --color-grid: #e1e0d9;
+  --color-axis: #c3c2b7;
+
+  /* États — toujours accompagnés d'un libellé, jamais porteurs de sens seuls. */
+  --color-status-good: #0ca30c;
+  --color-status-warning: #fab219;
+  --color-status-critical: #d03b3b;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-rise: rise 0.4s var(--ease-soft) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @layer base {
   html {
     color-scheme: light;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -34,12 +61,104 @@
     outline: 2px solid var(--color-brand);
     outline-offset: 2px;
   }
+
+  /* Une seule règle de repli : toute l'animation de l'app la respecte. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {
   /* Habillage commun des champs de saisie (input, textarea, select). */
   .field-control {
     @apply w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink shadow-xs;
+    @apply transition-[border-color,box-shadow] duration-150;
     @apply placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20;
   }
+}
+
+/**
+ * Transitions nommées, réutilisées par tous les composants.
+ * `fade` : apparition simple · `slide` : panneaux et sections
+ * `list` : listes réordonnables (déplacement fluide des voisins)
+ */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.18s var(--ease-soft);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition:
+    opacity 0.22s var(--ease-soft),
+    transform 0.22s var(--ease-soft);
+}
+.slide-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.2s var(--ease-soft),
+    transform 0.2s var(--ease-soft);
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-leave-to {
+  opacity: 0;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition:
+    opacity 0.22s var(--ease-soft),
+    transform 0.28s var(--ease-soft);
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+}
+/* Sort l'élément supprimé du flux pour que ses voisins glissent à sa place. */
+.list-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+/* Accordéon : la grille anime une hauteur inconnue sans mesure JavaScript. */
+.collapse-enter-active,
+.collapse-leave-active {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows 0.26s var(--ease-soft),
+    opacity 0.2s var(--ease-soft);
+}
+.collapse-enter-from,
+.collapse-leave-to {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+.collapse-enter-active > *,
+.collapse-leave-active > * {
+  overflow: hidden;
 }
